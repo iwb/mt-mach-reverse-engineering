@@ -1,0 +1,56 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+default_language_version:
+    python: python3.11
+repos:
+
+# Using this mirror lets us use mypyc-compiled black, which is about 2x faster
+- repo: https://github.com/psf/black-pre-commit-mirror
+  rev: 23.11.0
+  hooks:
+    - id: black
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0
+  hooks:
+    - id: check-added-large-files
+      args:
+        - --maxkb=10000
+    - id: debug-statements
+    - id: detect-private-key
+
+- repo: https://github.com/pycqa/isort  # Sorts python imports
+  rev: 5.13.0
+  hooks:
+    - id: isort
+      name: isort (python)
+
+- repo: https://github.com/PyCQA/flake8  # Linter
+  rev: 6.1.0
+  hooks:
+    - id: flake8
+      entry: pflake8
+      additional_dependencies: [pyproject-flake8]
+
+- repo: https://github.com/srstevenson/nb-clean
+  rev: 3.1.0
+  hooks:
+    - id: nb-clean
+      args:
+        - --remove-empty-cells
+        - --preserve-cell-metadata
+        - tags
+        - slideshow
+        - --
+
+- repo: https://github.com/pdm-project/pdm
+  rev: 2.18.2
+  hooks:
+    - id: pdm-export
+      args: ['-o', 'requirements.txt', '--without-hashes']
+      files: ^pdm.lock$
+
+- repo: https://github.com/pdm-project/pdm
+  rev: 2.18.2
+  hooks:
+    - id: pdm-lock-check

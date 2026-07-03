@@ -1,0 +1,2 @@
+# Keep this directory under version control.
+# Pipeline scripts in ../scripts write their .pkl outputs here.
